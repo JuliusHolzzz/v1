@@ -46,6 +46,8 @@ Dann setzt Supabase `SUPABASE_URL` und `SUPABASE_SERVICE_KEY` auf Vercel automat
 
 4. **Deploy**
 
+> **Schwarzer Bildschirm?** Alte `vercel.json` mit `"builds"` deployte nur `index.html` ohne `js/`/`css/`. Aktuelle Config nutzt nur `rewrites` — statische Dateien werden mit ausgeliefert.
+
 ## 4. Prüfen
 
 - `https://DEINE-APP.vercel.app/api/health`  
