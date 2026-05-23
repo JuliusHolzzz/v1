@@ -40,59 +40,17 @@
         background: #000000;
       }
   </style>
+  <script src="js/wikirace-shim.js">
+  </script>
   <script crossorigin="" src="js/index-Byi2lHnJ.js" type="module">
   </script>
   <link crossorigin="" href="css/index-Vfusw_rM.css" rel="stylesheet">
-  <script type="module">
-   if (window.self === window.top) {
-  let lastPath = "";
-  function getPageNameFromPath(path) {
-    const segments = path.split("/").filter(Boolean);
-    return segments[0] || null;
-  }
-  function trackPageView() {
-    const path = window.location.pathname;
-    if (path === lastPath) return;
-    lastPath = path;
-    const pageName = getPageNameFromPath(path) || "home";
-    const appId = "69f5077872bdbd351ef583ea";
-    if (!appId) return;
-    fetch(`/app-logs/${appId}/log-user-in-app/${pageName}`, {
-      method: "POST",
-    }).catch(() => {});
-  }
-  const originalPushState = history.pushState.bind(history);
-  history.pushState = function (...args) {
-    originalPushState(...args);
-    trackPageView();
-  };
-  const originalReplaceState = history.replaceState.bind(history);
-  history.replaceState = function (...args) {
-    originalReplaceState(...args);
-    trackPageView();
-  };
-  window.addEventListener("popstate", trackPageView);
-  trackPageView();
-}
-  </script>
   <meta content="images/86a5020ed_IMG_3581_1.jpeg" property="og:image">
-  <meta content="https://wiki-race.base44.app" property="og:url">
   <meta content="Wiki Race" property="og:site_name">
   <meta content="Wiki Race" name="twitter:title">
   <meta content="An engaging, competitive trivia platform designed to test and expand your knowledge through fast-paced, real-time challenges." name="twitter:description">
-  <meta content="https://media.base44.com/images/public/69f5077872bdbd351ef583ea/86a5020ed_IMG_3581.jpeg/v1/fill/w_1200,h_630/86a5020ed_IMG_3581.jpeg" name="twitter:image">
+  <meta content="images/86a5020ed_IMG_3581.jpeg" name="twitter:image">
   <meta content="summary_large_image" name="twitter:card">
-  <meta content="https://wiki-race.base44.app" name="twitter:url">
-  <link href="https://wiki-race.base44.app" rel="canonical">
-  <script data-seo-source="builder" type="application/ld+json">
-   {"name": "Wiki Race", "@context": "https://schema.org", "@type": "WebSite", "url": "https://wiki-race.base44.app"}
-  </script>
-  <script data-seo-source="builder" type="application/ld+json">
-   {"name": "Wiki Race", "logo": "https://media.base44.com/images/public/69f501aa43c67a9014e18d66/081525e04_logo.png", "@context": "https://schema.org", "@type": "Organization", "url": "https://wiki-race.base44.app"}
-  </script>
-  <script data-seo-source="builder" type="application/ld+json">
-   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"name": "Home", "item": "https://wiki-race.base44.app", "position": "1", "@type": "ListItem"}]}
-  </script>
  </head>
  <body>
   <div id="root">
@@ -105,19 +63,11 @@
     </p>
     <section aria-label="Data">
      <h2>
-      Data types
+      Backend
      </h2>
-     <ul>
-      <li>
-       GameScore
-      </li>
-      <li>
-       Player
-      </li>
-      <li>
-       Lobby
-      </li>
-     </ul>
+     <p>
+      Supabase (PostgreSQL) — not Base44
+     </p>
     </section>
    </div>
   </div>

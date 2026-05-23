@@ -1,5 +1,7 @@
 # WikiRace — Deploy (Vercel + Supabase)
 
+> **Base44 ist deaktiviert.** Alle Daten (Leaderboard, Lobbies, Accounts) liegen nur noch in **deiner Supabase**. Die alte Base44-Cloud wird vom Code nicht mehr angesprochen.
+
 ## 1. Supabase + GitHub (hast du schon)
 
 Mit **Supabase ↔ GitHub** auf `JuliusHolzzz/v1`:
