@@ -6,8 +6,12 @@ const jwt = require("jsonwebtoken");
 
 const app = express();
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+// Supabase ↔ Vercel integration uses SUPABASE_SERVICE_ROLE_KEY + NEXT_PUBLIC_SUPABASE_URL
+const supabaseUrl =
+  process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey =
+  process.env.SUPABASE_SERVICE_KEY ||
+  process.env.SUPABASE_SERVICE_ROLE_KEY;
 const supabase =
   supabaseUrl && supabaseKey
     ? createClient(supabaseUrl, supabaseKey)
@@ -18,7 +22,12 @@ const JWT_SECRET = process.env.JWT_SECRET || "wikirace_secret_change_me";
 function requireDb(_req, res, next) {
   if (!supabase) {
     return res.status(503).json({
-      error: "Database not configured. Set SUPABASE_URL and SUPABASE_SERVICE_KEY.",
+      error:
+        "Database not configured. On Vercel set SUPABASE_URL (or NEXT_PUBLIC_SUPABASE_URL) and SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SERVICE_KEY), then redeploy.",
+      missing: {
+        url: !supabaseUrl,
+        serviceKey: !supabaseKey,
+      },
     });
   }
   next();
@@ -48,33 +57,33 @@ function playerPasswordMatches(storedHash, providedHash) {
 // ── Middleware ────────────────────────────────────────────────────────────────
 app.use(
   cors({
-    origin(origin, callback) {
-      if (!origin) return callback(null, true);
-      const allowed = new Set([
-        "https://wiki-race.de",
-        "https://www.wiki-race.de",
-        "https://wiki-race.base44.app",
-        "http://localhost:5173",
-        "http://localhost:3000",
-        "http://localhost:4173",
-      ]);
-      if (allowed.has(origin) || /\.vercel\.app$/.test(origin)) {
-        return callback(null, true);
-      }
-      callback(new Error("Not allowed by CORS"));
-    },
+    origin: true,
     credentials: true,
   })
 );
 app.use(express.json());
 
 // ── Health check ──────────────────────────────────────────────────────────────
-app.get("/api/health", (_req, res) => {
-  res.json({
+app.get("/api/health", async (_req, res) => {
+  const out = {
     status: "ok",
     database: Boolean(supabase),
+    env: {
+      SUPABASE_URL: Boolean(process.env.SUPABASE_URL),
+      NEXT_PUBLIC_SUPABASE_URL: Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL),
+      SUPABASE_SERVICE_KEY: Boolean(process.env.SUPABASE_SERVICE_KEY),
+      SUPABASE_SERVICE_ROLE_KEY: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
+    },
     timestamp: new Date().toISOString(),
-  });
+  };
+
+  if (supabase) {
+    const { error } = await supabase.from("lobbies").select("id").limit(1);
+    out.tablesOk = !error;
+    if (error) out.tableError = error.message;
+  }
+
+  res.json(out);
 });
 
 // ═══════════════════════════════════════════════════════════════════════════════

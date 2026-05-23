@@ -14,8 +14,8 @@ Falls die Tabellen noch fehlen: einmal **SQL Editor** → Inhalt von `supabase_s
 
 | Vercel-Variable | Supabase |
 |-----------------|----------|
-| `SUPABASE_URL` | Project URL |
-| `SUPABASE_SERVICE_KEY` | `service_role` (secret) |
+| `SUPABASE_URL` oder `NEXT_PUBLIC_SUPABASE_URL` | Project URL |
+| `SUPABASE_SERVICE_ROLE_KEY` oder `SUPABASE_SERVICE_KEY` | `service_role` (secret) |
 
 ⚠️ `service_role` nur auf dem Server (Vercel), nie im Browser.
 
@@ -31,7 +31,7 @@ git push origin main
 
 **Option A — Supabase-Integration (empfohlen)**  
 Supabase Dashboard → **Project Settings** → **Integrations** → **Vercel** → Repo `v1` verknüpfen.  
-Dann setzt Supabase `SUPABASE_URL` und `SUPABASE_SERVICE_KEY` auf Vercel automatisch. Du musst nur noch **`JWT_SECRET`** manuell in Vercel ergänzen.
+Dann setzt Supabase meist **`NEXT_PUBLIC_SUPABASE_URL`** und **`SUPABASE_SERVICE_ROLE_KEY`** auf Vercel (unser Server liest beide Namen). Du musst nur noch **`JWT_SECRET`** manuell ergänzen und **Redeploy** auslösen.
 
 **Option B — manuell**  
 1. [vercel.com/new](https://vercel.com/new) → Repo **JuliusHolzzz/v1** importieren  
@@ -51,7 +51,9 @@ Dann setzt Supabase `SUPABASE_URL` und `SUPABASE_SERVICE_KEY` auf Vercel automat
 ## 4. Prüfen
 
 - `https://DEINE-APP.vercel.app/api/health`  
-  → `{"status":"ok","database":true,...}`
+  → `"database": true` und `"tablesOk": true`  
+  → Wenn `"database": false`: Env-Variablen fehlen auf Vercel → **Redeploy**  
+  → Wenn `"tablesOk": false`: `supabase/migrations/` in Supabase noch nicht gelaufen
 - App öffnen → Leaderboard (leer bis erste Scores)
 - Multiplayer → Lobby erstellen → sollte in **öffentliche Lobbies** erscheinen
 
