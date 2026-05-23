@@ -46,7 +46,9 @@ Dann setzt Supabase meist **`NEXT_PUBLIC_SUPABASE_URL`** und **`SUPABASE_SERVICE
 
 4. **Deploy**
 
-> **Schwarzer Bildschirm?** Alte `vercel.json` mit `"builds"` deployte nur `index.html` ohne `js/`/`css/`. Aktuelle Config nutzt nur `rewrites` — statische Dateien werden mit ausgeliefert.
+> **Architektur:** Ein `server.js` am Projekt-Root liefert **Frontend + API** auf derselben URL. Vercel erkennt `server.listen()` automatisch — keine kaputten `/api`-Rewrites mehr.
+
+> **Schwarzer Bildschirm?** War oft: JS/CSS 404. Mit `server.js` werden `js/`, `css/`, `images/` direkt mit ausgeliefert.
 
 ## 4. Prüfen
 
@@ -65,11 +67,9 @@ Vercel → Project → **Settings** → **Domains** → `wiki-race.de` hinzufüg
 
 ```bash
 cp .env.example .env
-# .env ausfüllen
+# .env ausfüllen (SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY)
 npm install
 npm start
-# In anderem Terminal: npx serve . -p 4173
-# Browser: http://localhost:4173  (API läuft auf :3001 — für lokales Testen besser: npx vercel dev)
+# Browser: http://localhost:3000
+# Test: http://localhost:3000/api/health  → database: true
 ```
-
-Empfohlen lokal: `npx vercel dev` (startet Frontend + API wie auf Vercel).
