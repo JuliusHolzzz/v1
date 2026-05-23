@@ -1,14 +1,23 @@
 # WikiRace — Deploy (Vercel + Supabase)
 
-## 1. Supabase einrichten (~5 Min.)
+## 1. Supabase + GitHub (hast du schon)
 
-1. Öffne [supabase.com](https://supabase.com) → **New project**
-2. Warte, bis die DB bereit ist
-3. **SQL Editor** → **New query** → Inhalt von `supabase_schema.sql` einfügen → **Run**
-4. **Project Settings** → **API**:
-   - **Project URL** → `SUPABASE_URL`
-   - **service_role** Key (secret!) → `SUPABASE_SERVICE_KEY`  
-     ⚠️ Niemals im Frontend verwenden — nur auf Vercel als Server-Env.
+Mit **Supabase ↔ GitHub** auf `JuliusHolzzz/v1`:
+
+- Schema liegt in `supabase/migrations/` (nicht nur `supabase_schema.sql` im Root)
+- Bei jedem Push auf `main` wendet Supabase neue Migrations auf das verknüpfte Projekt an
+- In Supabase: **Database** → **Migrations** — dort siehst du, ob `initial_wikirace_schema` durch ist
+
+Falls die Tabellen noch fehlen: einmal **SQL Editor** → Inhalt von `supabase_schema.sql` ausführen (gleicher Inhalt, harmlos wegen `IF NOT EXISTS`).
+
+**API-Keys** (für Vercel): **Project Settings** → **API**
+
+| Vercel-Variable | Supabase |
+|-----------------|----------|
+| `SUPABASE_URL` | Project URL |
+| `SUPABASE_SERVICE_KEY` | `service_role` (secret) |
+
+⚠️ `service_role` nur auf dem Server (Vercel), nie im Browser.
 
 ## 2. Code auf GitHub
 
@@ -20,8 +29,13 @@ git push origin main
 
 ## 3. Vercel verbinden
 
-1. [vercel.com/new](https://vercel.com/new) → Repo **JuliusHolzzz/v1** importieren
-2. **Root Directory**: leer lassen (Repo-Root ist das Projekt)
+**Option A — Supabase-Integration (empfohlen)**  
+Supabase Dashboard → **Project Settings** → **Integrations** → **Vercel** → Repo `v1` verknüpfen.  
+Dann setzt Supabase `SUPABASE_URL` und `SUPABASE_SERVICE_KEY` auf Vercel automatisch. Du musst nur noch **`JWT_SECRET`** manuell in Vercel ergänzen.
+
+**Option B — manuell**  
+1. [vercel.com/new](https://vercel.com/new) → Repo **JuliusHolzzz/v1** importieren  
+2. **Root Directory**: leer lassen  
 3. **Environment Variables** (Production + Preview):
 
 | Name | Wert |

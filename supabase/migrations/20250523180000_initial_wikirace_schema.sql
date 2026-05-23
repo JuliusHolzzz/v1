@@ -1,7 +1,4 @@
--- ══════════════════════════════════════════════════════════════
--- WikiRace Database Schema (Kopie für manuellen SQL Editor)
--- Automatisch via GitHub: supabase/migrations/20250523180000_initial_wikirace_schema.sql
--- ══════════════════════════════════════════════════════════════
+-- WikiRace initial schema (applied via Supabase GitHub integration on push)
 
 CREATE TABLE IF NOT EXISTS players (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
