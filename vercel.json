@@ -1,7 +1,5 @@
 {
-  "buildCommand": "pnpm run build:vercel",
   "outputDirectory": "dist/public",
-  "installCommand": "cd ../.. && pnpm install",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
   "headers": [
     {
